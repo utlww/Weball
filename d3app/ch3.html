@@ -1,26 +1,35 @@
-<html>
-    <head>
-        <title></title>
-        <style type="text/css">
-            div {
-                background-color: red;
-                font-size: 24px;
-                font-weight: bold;
-                color: white;
-            }
-            p {color: blue;}
-            p.highlight {color: black;
-                background-color: yellow;
-            }
-        </style>
-    </head>
-    <body>
+<!DOCTYPE html>
+<meta charset="utf-8">
 
-        <script type="text/javascript" src="ch3.js"></script>
-        
-        <p>I am a sibling to the div.</p>
-        <div>
-            <p>I am a descendant and child of the div.</p>
-        </div>
-    </body>
-</html>
+<style>
+.pumpkin {
+    fill: red;
+    stroke: orange;
+    stroke-width: 5;
+ }
+</style>
+
+<body>
+<script src="./d3/d3.js"></script>
+<script type="text/javascript">
+svg.selectAll("circle")
+    .data([32, 57, 112, 293])
+  .enter().append("circle")
+    .attr("cy", 90)
+    .attr("cx", String)
+    .attr("r", Math.sqrt);
+</script>
+
+<SVG>
+    <rect x="0" y="0" width="30" height="30" fill="purple"/>
+    <rect x="20" y="5" width="30" height="30" fill="blue"/>
+    <rect x="40" y="10" width="30" height="30" fill="green"/>
+    <rect x="60" y="15" width="30" height="30" fill="yellow"/>
+    <rect x="80" y="20" width="30" height="30" fill="red"/>
+</SVG>
+
+<p> ABC</p>
+<p> ABCabc</p>
+<p> ABCabc</p>
+
+</body>
