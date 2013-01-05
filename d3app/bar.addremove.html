@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>D3 Demo: A simple bar chart</title>
+        <script type="text/javascript" src="./d3/d3.js"></script>
+    <style type="text/css">
+    </style>
+  </head>
+  <body>
+    <p id="add">Click to ADD bars.</p>
+    <p id="remove">Click to REMOVE bars.</p>
+
+    <script type="text/javascript">
+
+      //Width and height
+      var w = 600;
+      var h = 250;
+      var padding = 30;
+
+      var yRange = 50;
+      var barPadding = 1;
+      
+      var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
+              11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
+      
+      // scale      
+      var xScale = d3.scale.ordinal()             // ordinal scale is for category
+                .domain(d3.range(dataset.length)) // use int value as input domain
+                .rangeRoundBands([0, w], 0.05);   // bandwidth = (w-0)/length. 0.05 = 5% as spacing between bands.
+
+      var yScale = d3.scale.linear()
+                .domain([0, d3.max(dataset)])
+                .range([padding, h-padding]);
+
+      //Create SVG element
+      var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+      svg.selectAll("rect")
+         .data(dataset)
+         .enter()
+         .append("rect")
+         .attr("x", function(d, i) {
+            return xScale(i);
+         })
+         .attr("y", function(d) {
+            return h - yScale(d);
+         })
+         .attr("width", xScale.rangeBand())
+         .attr("height", function(d) {
+            return yScale(d);
+         })
+         .attr("fill", function(d) {
+          return "rgb(0, 0, " + (d * 10) + ")";
+         });
+
+      svg.selectAll("text")
+         .data(dataset)
+         .enter()
+         .append("text")
+         .text(function(d) {
+            return d;
+         })
+         .attr("text-anchor", "middle")
+         .attr("x", function(d, i) {
+            return xScale(i) + xScale.rangeBand() / 2;
+         })
+         .attr("y", function(d) {
+            return h - yScale(d) + 14;
+         })
+         .attr("font-family", "sans-serif")
+         .attr("font-size", "11px")
+         .attr("fill", "white");
+
+      d3.selectAll("p")
+        .on("click", function(){
+
+                    var paragraphID = d3.select(this).attr("id");
+
+
+                    if(paragraphID == "add") {
+
+                      dataset.push(Math.round(Math.random() * yRange));
+
+                      xScale.domain(d3.range(dataset.length));
+                      yScale.domain([0, d3.max(dataset)]);
+
+                      var bars = svg.selectAll("rect").data(dataset);
+
+                      // enter
+                      bars.enter()
+                         .append("rect")
+                         .attr("x", w)
+                         .attr("y", function(d) {return h - yScale(d);})
+                         .attr("width", xScale.rangeBand())
+                         .attr("height", function(d) {return yScale(d);})
+                         .attr("fill", function(d) { return "rgb(0, 0, " + (d * 10) + ")"; });
+
+                      // transit
+                      bars.transition()
+                         //.delay(function(d, i) { return i*1000/dataset.length; })
+                         .duration(500)
+                         .ease("cubic-in-out")
+                         .attr("x", function(d, i) { return xScale(i); })
+                         .attr("y", function(d) { return h - yScale(d); })
+                         .attr("width", xScale.rangeBand())
+                         .attr("height", function(d) { return yScale(d); });
+                         
+                      // texts move
+                      var texts = svg.selectAll("text")
+                                    .data(dataset);
+
+                      texts.enter()
+                          .append("text")
+                          .attr("x", w)
+                          .attr("y", function(d) {return h - yScale(d) + 14; })
+                          .attr("text-anchor", "middle")
+                          .text(function(d) {return d; })
+                          .attr("font-family", "sans-serif")
+                          .attr("font-size", "11px")
+                          .attr("fill", "white");;
+
+
+                      texts.transition()
+                          .duration(500)
+                          .attr("text-anchor", "middle")
+                          .attr("x", function(d, i) { return xScale(i) + xScale.rangeBand() / 2; })
+                          .attr("y", function(d) { return h - yScale(d) + 14; });
+                    }
+                    else{
+
+                    }
+
+        });
+    </script>
+  </body>
+</html>
